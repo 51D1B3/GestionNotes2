@@ -1,0 +1,67 @@
+name: notes_app
+description: "Une application pour la gestion des notes universitaires."
+publish_to: 'none'
+
+version: 1.0.0+2
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: 2.30.0
+  firebase_auth: 4.19.0
+  cloud_firestore: 4.17.0
+  firebase_storage: 11.6.0
+  image_picker: ^1.1.2
+  pdf: ^3.10.8
+  path_provider: ^2.1.5
+  cupertino_icons: ^1.0.8
+  fl_chart: ^0.68.0
+  provider: ^6.1.2
+  shared_preferences: ^2.2.3
+  open_file: ^3.3.2
+  easy_localization: ^3.0.8
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+  flutter_native_splash: ^2.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/applogo.png"
+  adaptive_icon_foreground: "assets/applogo.png"
+  adaptive_icon_background: "#FFFFFF"
+
+# Configuration de l'écran de démarrage
+flutter_native_splash:
+  color: "#000000"
+  image: assets/applogo.png
+  android_12:
+    image: assets/applogo.png
+    color: "#000000"
+  web: false
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/logo.png
+    - assets/developpeur.jpg
+    - assets/applogo.png
+    - assets/applogo_foreground.png
+    - assets/translations/
+    - assets/avatars/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
