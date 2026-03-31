@@ -19,11 +19,7 @@ class PdfService {
     final profile = await firestoreService.getProfile();
     
     String studentName = "";
-<<<<<<< HEAD
-    String labelEtudiant = "Étudiant";
-=======
     String genderTitle = "Étudiant"; // Par défaut
->>>>>>> abe950f (Modification version 2)
 
     if (profile != null) {
       String lastName = profile['lastName']?.toUpperCase() ?? "";
@@ -35,15 +31,9 @@ class PdfService {
       }
       studentName = "$firstName $lastName";
 
-<<<<<<< HEAD
-      // Rectification du libellé selon le sexe
-      if (gender == 'Femme') {
-        labelEtudiant = "Étudiante";
-=======
       // Si c'est une femme, on change le titre en "Étudiante"
       if (gender == "Femme") {
         genderTitle = "Étudiante";
->>>>>>> abe950f (Modification version 2)
       }
     }
     
@@ -75,11 +65,7 @@ class PdfService {
               pw.SizedBox(height: 20),
               
               if (studentName.isNotEmpty) ...[
-<<<<<<< HEAD
-                pw.Text('$labelEtudiant : $studentName', style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold)),
-=======
                 pw.Text('$genderTitle : $studentName', style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold)),
->>>>>>> abe950f (Modification version 2)
                 pw.SizedBox(height: 10),
               ],
 

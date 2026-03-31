@@ -53,5 +53,6 @@ configurations.all {
         force("androidx.lifecycle:lifecycle-common:2.8.7")
         force("androidx.lifecycle:lifecycle-runtime:2.8.7")
         force("androidx.lifecycle:lifecycle-viewmodel:2.8.7")
+        force("androidx.browser:browser:1.8.0") // AJOUTÉ POUR RÉPARER LE BUILD RELEASE
     }
 }

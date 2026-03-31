@@ -10,6 +10,7 @@ import 'package:notes_app/services/theme_provider.dart';
 import 'package:notes_app/services/university_setup_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'firebase_options.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'services/firestore_service.dart';
@@ -140,10 +141,11 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   Future<void> _startApp() async {
     try {
-      // Connexion anonyme si nécessaire
       if (FirebaseAuth.instance.currentUser == null) {
         await FirebaseAuth.instance.signInAnonymously().timeout(const Duration(seconds: 10));
       }
+      // Vérifier la mise à jour si on a internet
+      _checkUpdate();
     } catch (e) {
       if (!_isProfileLocal) {
         setState(() => _error = "Connexion internet requise pour la première configuration.");
@@ -155,6 +157,56 @@ class _AuthWrapperState extends State<AuthWrapper> {
     if (mounted) {
       setState(() => _showSplash = false);
     }
+  }
+
+  void _checkUpdate() async {
+    try {
+      final doc = await FirebaseFirestore.instance.collection('app_config').doc('update').get();
+      if (doc.exists) {
+        int newVersion = doc['version_code'] ?? 0;
+        String apkUrl = doc['apk_url'] ?? "";
+        int currentVersion = 2; // Version actuelle 1.0.0+2
+
+        if (newVersion > currentVersion && apkUrl.isNotEmpty) {
+          _showUpdateDialog(apkUrl);
+        }
+      }
+    } catch (e) {
+      debugPrint("Erreur check update: $e");
+    }
+  }
+
+  void _showUpdateDialog(String url) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF0A2E36),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFF3CDEED), width: 1)),
+        title: const Text("Mise à jour disponible", style: TextStyle(color: Color(0xFF3CDEED), fontWeight: FontWeight.bold)),
+        content: const Text("Une nouvelle version de UniNotes est disponible. Voulez-vous la télécharger maintenant ?", style: TextStyle(color: Colors.white70)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("PLUS TARD", style: TextStyle(color: Colors.white38)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF00A8E8),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            onPressed: () async {
+              final uri = Uri.parse(url);
+              if (await canLaunchUrl(uri)) {
+                await launchUrl(uri, mode: LaunchMode.externalApplication);
+              }
+            },
+            child: const Text("TÉLÉCHARGER"),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
